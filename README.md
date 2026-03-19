@@ -3,11 +3,11 @@
 > Raft consensus from scratch in 2000 lines of Python -- because etcd is overkill for ML metadata
 
 [![CI](https://github.com/jrajath94/distributed-kv-store/workflows/CI/badge.svg)](https://github.com/jrajath94/distributed-kv-store/actions)
-[![Coverage](https://codecov.io/gh/jrajath94/distributed-kv-store/branch/main/graph/badge.svg)](https://codecov.io/gh/jrajath94/distributed-kv-store)
+[![Coverage](https://codecov.io/gh/jrajath94/distributed-kv-store/branch/master/graph/badge.svg)](https://codecov.io/gh/jrajath94/distributed-kv-store)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-## The Problem
+## Why This Exists
 
 When you need distributed consensus -- multiple machines agreeing on state -- the default choices are etcd or ZooKeeper. Both are battle-tested. Both are also massive. etcd is a 23MB Go binary with TLS certificate management, compaction tuning, and dozens of operational metrics to monitor. ZooKeeper requires the JVM, garbage collection tuning, and a ZooKeeper-specific mental model of ephemeral nodes, watches, and recipes.
 
