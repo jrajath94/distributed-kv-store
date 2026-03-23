@@ -6,8 +6,6 @@ import pytest
 
 from distributed_kv_store.core import RaftCluster, RaftLog, RaftNode, StateMachine
 from distributed_kv_store.exceptions import (
-    ConsensusError,
-    ElectionError,
     NotLeaderError,
 )
 from distributed_kv_store.models import (
@@ -18,7 +16,6 @@ from distributed_kv_store.models import (
     RaftConfig,
     RequestVoteRequest,
 )
-
 
 # ── StateMachine Tests ─────────────────────────────────────────────────────────
 

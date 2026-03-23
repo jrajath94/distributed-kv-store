@@ -9,9 +9,8 @@ from __future__ import annotations
 import logging
 import random
 import time
-from typing import Any
 
-from distributed_kv_store.models import ClusterStatus, LogEntry
+from distributed_kv_store.models import ClusterStatus
 
 logger = logging.getLogger(__name__)
 

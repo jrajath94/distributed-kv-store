@@ -270,7 +270,7 @@ def main() -> None:
     print_results("Election Time (100 trials)", election_results)
 
     # Scaling
-    print(f"\nCluster Size Scaling")
+    print("\nCluster Size Scaling")
     print("-" * 60)
     print(f"  {'Nodes':>5s} | {'Ops/sec':>10s} | {'p50 (us)':>10s} | {'p99 (us)':>10s}")
     print(f"  {'-'*5} | {'-'*10} | {'-'*10} | {'-'*10}")

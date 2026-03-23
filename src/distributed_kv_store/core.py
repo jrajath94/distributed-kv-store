@@ -13,10 +13,9 @@ log replication and majority commitment.
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
 from distributed_kv_store.exceptions import (
-    ConsensusError,
     ElectionError,
     NotLeaderError,
 )
@@ -31,7 +30,7 @@ from distributed_kv_store.models import (
     RequestVoteRequest,
     RequestVoteResponse,
 )
-from distributed_kv_store.utils import majority_count, monotonic_ms
+from distributed_kv_store.utils import majority_count
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +60,7 @@ class StateMachine:
         """Current state machine version (number of applied commands)."""
         return self._version
 
-    def apply(self, entry: LogEntry) -> Optional[str]:
+    def apply(self, entry: LogEntry) -> str | None:
         """Apply a log entry to the state machine.
 
         Args:
@@ -89,7 +88,7 @@ class StateMachine:
             return None
         return None
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> str | None:
         """Read a value from the state machine.
 
         Reads do not go through Raft -- they are served directly
@@ -164,7 +163,7 @@ class RaftLog:
         """Term of the last log entry."""
         return self._entries[-1].term
 
-    def get(self, index: int) -> Optional[LogEntry]:
+    def get(self, index: int) -> LogEntry | None:
         """Get a log entry by index.
 
         Args:
@@ -281,14 +280,14 @@ class RaftNode:
 
         # Persistent state
         self._current_term: int = 0
-        self._voted_for: Optional[str] = None
+        self._voted_for: str | None = None
         self._log = RaftLog()
 
         # Volatile state
         self._state = NodeState.FOLLOWER
         self._commit_index: int = 0
         self._last_applied: int = 0
-        self._leader_id: Optional[str] = None
+        self._leader_id: str | None = None
 
         # Leader-only state (reinitialized on election)
         self._next_index: dict[str, int] = {}
@@ -315,7 +314,7 @@ class RaftNode:
         return self._current_term
 
     @property
-    def leader_id(self) -> Optional[str]:
+    def leader_id(self) -> str | None:
         """ID of the current leader (if known)."""
         return self._leader_id
 
@@ -667,7 +666,7 @@ class RaftCluster:
             node_id = f"node-{i}"
             self._nodes[node_id] = RaftNode(node_id, self._config)
 
-        self._leader_id: Optional[str] = None
+        self._leader_id: str | None = None
         logger.info(
             "Cluster created with %d nodes", self._config.cluster_size
         )
@@ -678,13 +677,13 @@ class RaftCluster:
         return self._nodes
 
     @property
-    def leader(self) -> Optional[RaftNode]:
+    def leader(self) -> RaftNode | None:
         """Get the current leader node."""
         if self._leader_id and self._leader_id in self._nodes:
             return self._nodes[self._leader_id]
         return None
 
-    def elect_leader(self, candidate_id: Optional[str] = None) -> str:
+    def elect_leader(self, candidate_id: str | None = None) -> str:
         """Run a leader election.
 
         Simulates the election process by having a candidate
@@ -772,7 +771,7 @@ class RaftCluster:
         leader.propose(entry)
         self._replicate_and_commit()
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> str | None:
         """Read a value from the leader's state machine.
 
         Args:
